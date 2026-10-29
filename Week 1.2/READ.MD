@@ -32,6 +32,7 @@ Café Calle Ocho needs a clear way to organize customer orders and communicate t
 5. Order statuses: received, preparing, ready, and picked up.
 6. Order history.
 7. Menu administration for authorized staff.
+8. Order modification and cancellation
 
 ## Out of Scope
 1. Online payments.
