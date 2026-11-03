@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Order Confirmed | Café Calle Ocho</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    >
+  </head>
+  <body>
+    <header class="container">
+      <nav aria-label="Main navigation">
+        <ul>
+          <li><a href="menu.html">Menu</a></li>
+        </ul>
+        <ul>
+          <li><a href="history.html">My Orders</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="container">
+      <article>
+        <header>
+          <h1>Order Confirmed!</h1>
+          <p>Thank you for your order. We have received it and will begin preparing your Cuban café favorites soon.</p>
+        </header>
+
+        <p><strong>Order number:</strong> CCO-1001</p>
+        <p><strong>Status:</strong> Received</p>
+
+        <section aria-labelledby="order-details">
+          <h2 id="order-details">Order Details</h2>
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Item</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Café con leche</th>
+                <td>2</td>
+                <td>$3.50 each</td>
+              </tr>
+              <tr>
+                <th scope="row">Cuban toast</th>
+                <td>1</td>
+                <td>$2.75</td>
+              </tr>
+              <tr>
+                <th scope="row">Ham croquetas</th>
+                <td>2</td>
+                <td>$2.25 each</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <th scope="row" colspan="2">Total</th>
+                <td><strong>$14.25</strong></td>
+              </tr>
+            </tfoot>
+          </table>
+        </section>
+
+        <footer>
+          <nav aria-label="Confirmation actions">
+            <ul>
+              <li><a href="history.html">Check Order Status</a></li>
+            </ul>
+            <ul>
+              <li><a href="menu.html" role="button">Return to Menu</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Your Order | Café Calle Ocho</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    >
+  </head>
+  <body>
+    <header class="container">
+      <nav aria-label="Main navigation">
+        <ul>
+          <li><a href="menu.html">Menu</a></li>
+        </ul>
+        <ul>
+          <li><a href="history.html">My Orders</a></li>
+          <li><a href="menu-admin.html">Staff Login</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="container">
+      <h1>Your Order</h1>
+
+      <div class="overflow-auto">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Item</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Price</th>
+              <th scope="col">Remove</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Café con leche</th>
+              <td>2</td>
+              <td>$3.50 each</td>
+              <td><button type="button" class="secondary">Remove</button></td>
+            </tr>
+            <tr>
+              <th scope="row">Cuban toast</th>
+              <td>1</td>
+              <td>$2.75</td>
+              <td><button type="button" class="secondary">Remove</button></td>
+            </tr>
+            <tr>
+              <th scope="row">Ham croquetas</th>
+              <td>2</td>
+              <td>$2.25 each</td>
+              <td><button type="button" class="secondary">Remove</button></td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th scope="row" colspan="2">Total</th>
+              <td colspan="2"><strong>$14.25</strong></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <nav aria-label="Order actions">
+        <ul>
+          <li><a href="menu.html">Continue Shopping</a></li>
+        </ul>
+        <ul>
+          <li><a href="confirmation.html" role="button">Place Order</a></li>
+        </ul>
+      </nav>
+    </main>
+  </body>
+</html>

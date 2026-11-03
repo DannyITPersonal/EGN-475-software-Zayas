@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Kitchen Order Board | Café Calle Ocho</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    >
+  </head>
+  <body>
+    <header class="container">
+      <nav aria-label="Main navigation">
+        <ul>
+          <li><a href="menu-admin.html">Menu Admin</a></li>
+        </ul>
+        <ul>
+          <li><a href="menu.html">Customer Menu</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="container">
+      <h1>Kitchen Order Board</h1>
+      <p>Static sample orders. Status buttons are for display only.</p>
+
+      <section aria-label="Sample kitchen orders">
+        <article>
+          <header>
+            <h2>Order CCO-1001</h2>
+            <p><strong>Customer:</strong> Elena Rodriguez</p>
+            <p><strong>Received:</strong> 11:42 AM</p>
+            <p><strong>Status:</strong> Received</p>
+          </header>
+          <h3>Items</h3>
+          <ul>
+            <li>2 × Café con leche</li>
+            <li>1 × Cuban toast</li>
+            <li>2 × Ham croquetas</li>
+          </ul>
+          <footer>
+            <button type="button">Start Preparing</button>
+            <button type="button" class="secondary">Mark Ready</button>
+            <button type="button" class="contrast">Mark Picked Up</button>
+          </footer>
+        </article>
+
+        <article>
+          <header>
+            <h2>Order CCO-1002</h2>
+            <p><strong>Customer:</strong> Mateo Garcia</p>
+            <p><strong>Received:</strong> 11:48 AM</p>
+            <p><strong>Status:</strong> Preparing</p>
+          </header>
+          <h3>Items</h3>
+          <ul>
+            <li>1 × Cuban sandwich</li>
+            <li>1 × Café con leche</li>
+          </ul>
+          <footer>
+            <button type="button">Start Preparing</button>
+            <button type="button" class="secondary">Mark Ready</button>
+            <button type="button" class="contrast">Mark Picked Up</button>
+          </footer>
+        </article>
+
+        <article>
+          <header>
+            <h2>Order CCO-1003</h2>
+            <p><strong>Customer:</strong> Sofia Martinez</p>
+            <p><strong>Received:</strong> 11:55 AM</p>
+            <p><strong>Status:</strong> Ready</p>
+          </header>
+          <h3>Items</h3>
+          <ul>
+            <li>2 × Cuban toast</li>
+            <li>1 × Ham croqueta</li>
+          </ul>
+          <footer>
+            <button type="button">Start Preparing</button>
+            <button type="button" class="secondary">Mark Ready</button>
+            <button type="button" class="contrast">Mark Picked Up</button>
+          </footer>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>

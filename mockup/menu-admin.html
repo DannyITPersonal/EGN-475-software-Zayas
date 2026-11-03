@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Menu Administration | Café Calle Ocho</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    >
+  </head>
+  <body>
+    <header class="container">
+      <nav aria-label="Main navigation">
+        <ul>
+          <li><a href="kitchen.html">Kitchen Board</a></li>
+        </ul>
+        <ul>
+          <li><a href="menu.html">Customer Menu</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="container">
+      <h1>Menu Administration</h1>
+
+      <section aria-labelledby="existing-items">
+        <h2 id="existing-items">Existing Menu Items</h2>
+        <div class="overflow-auto">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Item name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Price</th>
+                <th scope="col">Availability</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Café con leche</th>
+                <td>Rich Cuban espresso softened with steamed milk.</td>
+                <td>$3.50</td>
+                <td>Available</td>
+                <td><button type="button" class="secondary">Edit</button></td>
+              </tr>
+              <tr>
+                <th scope="row">Cuban toast</th>
+                <td>Buttered Cuban bread, pressed until crisp and golden.</td>
+                <td>$2.75</td>
+                <td>Available</td>
+                <td><button type="button" class="secondary">Edit</button></td>
+              </tr>
+              <tr>
+                <th scope="row">Ham croqueta</th>
+                <td>A crisp, golden croquette with a savory ham filling.</td>
+                <td>$2.25</td>
+                <td>Available</td>
+                <td><button type="button" class="secondary">Edit</button></td>
+              </tr>
+              <tr>
+                <th scope="row">Cuban sandwich</th>
+                <td>Roast pork, ham, Swiss cheese, pickles, and mustard on pressed Cuban bread.</td>
+                <td>$8.50</td>
+                <td>Sold out</td>
+                <td><button type="button" class="secondary">Edit</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section aria-labelledby="add-item">
+        <h2 id="add-item">Add New Item</h2>
+        <form action="menu-admin.html" method="get">
+          <label for="item-name">Name</label>
+          <input type="text" id="item-name" name="name" placeholder="Item name">
+
+          <label for="item-description">Description</label>
+          <textarea id="item-description" name="description" rows="3" placeholder="Describe the menu item"></textarea>
+
+          <label for="item-price">Price</label>
+          <input type="number" id="item-price" name="price" min="0" step="0.01" placeholder="0.00">
+
+          <div class="grid">
+            <button type="submit">Save</button>
+            <button type="button" class="secondary">Cancel</button>
+          </div>
+        </form>
+        <p><small>Static mockup: saving, editing, and canceling do not change menu data.</small></p>
+      </section>
+    </main>
+  </body>
+</html>
