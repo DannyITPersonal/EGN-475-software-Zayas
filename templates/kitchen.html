@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Kitchen Board - Cafe Calle Ocho{% endblock %}
+
+{% block content %}
+<h1>Kitchen Order Board</h1>
+<p>View incoming orders and their preparation status.</p>
+
+<section aria-label="Kitchen orders">
+    {% for order in orders %}
+    <article>
+        <header>
+            <h2>Order #{{ order.id }}</h2>
+            <p><strong>Customer:</strong> {{ order.customer }}</p>
+            <p><strong>Received:</strong> {{ order.time }}</p>
+            <p><strong>Status:</strong> {{ order.status }}</p>
+        </header>
+
+        <h3>Items</h3>
+        <p>{{ order['items'] }}</p>
+
+        <footer>
+            <button type="button">Start Preparing</button>
+            <button type="button" class="secondary">Mark Ready</button>
+            <button type="button" class="contrast">Mark Picked Up</button>
+        </footer>
+    </article>
+    {% endfor %}
+</section>
+{% endblock %}

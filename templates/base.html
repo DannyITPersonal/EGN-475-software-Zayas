@@ -1,0 +1,36 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{% block title %}Cafe Calle Ocho{% endblock %}</title>
+
+    <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+</head>
+
+<body>
+
+    <nav class="container">
+        <ul>
+            <li><strong>Cafe Calle Ocho</strong></li>
+        </ul>
+
+        <ul>
+            <li><a href="{{ url_for('home') }}">Home</a></li>
+            <li><a href="{{ url_for('menu') }}">Menu</a></li>
+            <li><a href="{{ url_for('new_order') }}">Place Order</a></li>
+            <li><a href="{{ url_for('kitchen') }}">Kitchen</a></li>
+            <li><a href="{{ url_for('orders') }}">Order History</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+</body>
+</html>

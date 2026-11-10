@@ -1,0 +1,38 @@
+
+{% extends "base.html" %}
+
+{% block title %}Place an Order - Cafe Calle Ocho{% endblock %}
+
+{% block content %}
+
+<h1>Place an Order</h1>
+
+<p>Select your favorite items from our menu.</p>
+
+<form>
+
+    <label for="customer">Customer Name</label>
+    <input type="text" id="customer" name="customer"
+           placeholder="Enter your name">
+
+    <label for="item">Select Menu Item</label>
+
+    <select id="item" name="item">
+        {% for item in items %}
+        <option value="{{ item.id }}">
+            {{ item.name }} - ${{ "%.2f"|format(item.price_cents / 100) }}
+        </option>
+        {% endfor %}
+    </select>
+
+    <label for="quantity">Quantity</label>
+    <input type="number" id="quantity" name="quantity"
+           min="1" value="1">
+
+    <button type="button" disabled>
+        Ordering Available in Week 4
+    </button>
+
+</form>
+
+{% endblock %}

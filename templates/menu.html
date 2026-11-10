@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Menu - Cafe Calle Ocho{% endblock %}
+
+{% block content %}
+<header>
+    <h1>Café Calle Ocho Menu</h1>
+    <p>Fresh Cuban café favorites, served with a taste of Little Havana.</p>
+</header>
+
+<div id="menu">
+    {% for category, category_items in items|groupby('category') %}
+    <section aria-labelledby="category-{{ loop.index }}">
+        <h2 id="category-{{ loop.index }}">{{ category }}</h2>
+
+        {% for item in category_items %}
+        <article>
+            <h3>{{ item.name }}</h3>
+            <p><strong>${{ "%.2f"|format(item.price_cents / 100) }}</strong></p>
+            <a href="{{ url_for('item_detail', item_id=item.id) }}" role="button">
+                View Details
+            </a>
+        </article>
+        {% endfor %}
+    </section>
+    {% endfor %}
+
+    <p><a href="{{ url_for('new_order') }}">View Order</a></p>
+</div>
+{% endblock %}

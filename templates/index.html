@@ -1,0 +1,37 @@
+
+{% extends "base.html" %}
+
+{% block title %}Home - Cafe Calle Ocho{% endblock %}
+
+{% block content %}
+
+<h1>Welcome to Cafe Calle Ocho</h1>
+
+<p>Enjoy authentic Cuban coffee, sandwiches, pastries, and desserts.</p>
+
+<article>
+    <h2>Fresh Cuban Favorites</h2>
+    <p>Experience the flavors of Miami with our freshly prepared menu.</p>
+
+    <a href="{{ url_for('menu') }}" role="button">
+        View Our Menu
+    </a>
+</article>
+
+<h2>Quick Navigation</h2>
+
+<div class="grid">
+    <article>
+        <h3>Our Menu</h3>
+        <p>Explore our food and drinks.</p>
+        <a href="{{ url_for('menu') }}">View Menu</a>
+    </article>
+
+    <article>
+        <h3>Place an Order</h3>
+        <p>Choose your favorite items.</p>
+        <a href="{{ url_for('new_order') }}">Start Order</a>
+    </article>
+</div>
+
+{% endblock %}
