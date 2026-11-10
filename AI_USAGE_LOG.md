@@ -38,3 +38,11 @@ AI assistance was used to review the supplied user stories against INVEST and to
 ## Limitations and review
 
 The pages are visual prototypes. Add, remove, search, save, edit, cancel, and order-status controls do not update data or perform real operations. The order search and not-found message are illustrative only. Sample content and the resulting layouts should be reviewed and adjusted by the project owner before submission or implementation.
+
+## Additional AI assistance — November 10, 2026
+
+| Activity | AI assistance provided | Verification |
+|---|---|---|
+| Menu Jinja template | Updated `templates/menu.html` to extend `base.html`, display menu items grouped by category, format prices to two decimal places, and use `url_for()` for item and order links. | Requested `/menu` and checked item names, formatted prices, and generated links. |
+| Kitchen Jinja template | Updated `templates/kitchen.html` to extend `base.html` and display each order in its own card, preserving the wireframe's order details and display-only status controls. | Requested `/kitchen` and checked all three sample orders and their customer, items, time, and status. Used bracket access for the `items` dictionary key to avoid Jinja resolving the dictionary method. |
+| Menu detail route review | Reviewed the route's integer URL converter, in-memory item lookup by ID, and `abort(404)` behavior. No code change or database functionality was needed. | Confirmed an existing item returns 200, while an unknown ID and a non-integer path return 404. |
