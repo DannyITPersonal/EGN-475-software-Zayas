@@ -1,6 +1,25 @@
-from flask import Flask, render_template, abort
+import math
+import os
+from flask import (
+    Flask,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    abort
+)
+import db
 
 app = Flask(__name__)
+
+app.config["DATABASE"] = os.path.join(
+    app.instance_path,
+    "cafe.sqlite"
+)
+
+os.makedirs(app.instance_path, exist_ok=True)
+
+db.init_app(app)
 
 # Sample menu data
 SAMPLE_ITEMS = [
@@ -36,21 +55,93 @@ def home():
 # Menu page
 @app.route("/menu")
 def menu():
-    return render_template("menu.html", items=SAMPLE_ITEMS)
+    database = db.get_db()
+    items = database.execute(
+        """
+        SELECT id, name, category, price_cents
+        FROM menu_items
+        WHERE available = 1
+        ORDER BY name
+        """
+    ).fetchall()
+    return render_template(
+        "menu.html",
+        items=items
+    )
 
 
 # Individual menu item page
 @app.route("/menu/<int:item_id>")
 def item_detail(item_id):
-    item = next(
-        (item for item in SAMPLE_ITEMS if item["id"] == item_id),
-        None
-    )
+    database = db.get_db()
+    item = database.execute(
+        "SELECT * FROM menu_items WHERE id = ?",
+        (item_id,)
+    ).fetchone()
 
     if item is None:
         abort(404)
 
-    return render_template("item.html", item=item)
+    return render_template(
+        "item.html",
+        item=item
+    )
+
+
+# Add a menu item
+@app.route("/admin/menu/new", methods=["GET", "POST"])
+def new_menu_item():
+    if request.method == "POST":
+        name = request.form.get("name", "").strip()
+        category = request.form.get("category", "").strip()
+        price = request.form.get("price", "").strip()
+        form_data = {
+            "name": name,
+            "category": category,
+            "price": price,
+        }
+
+        if not name:
+            return render_template(
+                "new_menu_item.html",
+                error="Menu item name is required.",
+                form_data=form_data
+            )
+
+        if not category:
+            return render_template(
+                "new_menu_item.html",
+                error="Menu item category is required.",
+                form_data=form_data
+            )
+
+        try:
+            price_value = float(price)
+            if not math.isfinite(price_value) or price_value < 0:
+                raise ValueError
+            price_cents = round(price_value * 100)
+            if price_cents > 9223372036854775807:
+                raise ValueError
+        except (OverflowError, ValueError):
+            return render_template(
+                "new_menu_item.html",
+                error="Enter a valid non-negative price.",
+                form_data=form_data
+            )
+
+        database = db.get_db()
+        database.execute(
+            """
+            INSERT INTO menu_items
+            (name, category, price_cents, available)
+            VALUES (?, ?, ?, ?)
+            """,
+            (name, category, price_cents, 1)
+        )
+        database.commit()
+        return redirect(url_for("menu"))
+
+    return render_template("new_menu_item.html", form_data={})
 
 
 # New order page

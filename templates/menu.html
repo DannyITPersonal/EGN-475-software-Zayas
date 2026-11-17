@@ -9,6 +9,9 @@
 </header>
 
 <div id="menu">
+    <p><a href="{{ url_for('new_menu_item') }}" role="button">Add Menu Item</a></p>
+
+    {% if items %}
     {% for category, category_items in items|groupby('category') %}
     <section aria-labelledby="category-{{ loop.index }}">
         <h2 id="category-{{ loop.index }}">{{ category }}</h2>
@@ -24,6 +27,9 @@
         {% endfor %}
     </section>
     {% endfor %}
+    {% else %}
+    <p>No menu items are currently available.</p>
+    {% endif %}
 
     <p><a href="{{ url_for('new_order') }}">View Order</a></p>
 </div>

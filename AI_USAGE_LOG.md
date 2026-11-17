@@ -46,3 +46,14 @@ The pages are visual prototypes. Add, remove, search, save, edit, cancel, and or
 | Menu Jinja template | Updated `templates/menu.html` to extend `base.html`, display menu items grouped by category, format prices to two decimal places, and use `url_for()` for item and order links. | Requested `/menu` and checked item names, formatted prices, and generated links. |
 | Kitchen Jinja template | Updated `templates/kitchen.html` to extend `base.html` and display each order in its own card, preserving the wireframe's order details and display-only status controls. | Requested `/kitchen` and checked all three sample orders and their customer, items, time, and status. Used bracket access for the `items` dictionary key to avoid Jinja resolving the dictionary method. |
 | Menu detail route review | Reviewed the route's integer URL converter, in-memory item lookup by ID, and `abort(404)` behavior. No code change or database functionality was needed. | Confirmed an existing item returns 200, while an unknown ID and a non-integer path return 404. |
+
+## Week 4 — SQLite database schema — November 17, 2026
+
+**Project option:** Option A — Cuban café ordering system
+
+AI assistance was used to create `schema.sql` for the Café Calle Ocho Flask project based on the project owner's requested tables and constraints.
+
+| Activity | AI assistance provided | Verification |
+|---|---|---|
+| Database schema | Created `users`, `menu_items`, `orders`, and `order_items` tables. Added auto-incrementing integer primary keys, foreign-key references, SQLite-compatible defaults, integer prices in cents, boolean-style availability values, the `received` order-status default, and a default quantity of 1. Added drop statements in dependency order so the schema can rebuild the database. | Executed the script twice with SQLite; verified the sample data, requested defaults, and foreign-key integrity. |
+| Sample data | Added six realistic Café Calle Ocho menu items and three guest sample orders, with order-item rows linking each order to menu items. | Confirmed the seeded menu, orders, and order items were present after execution. |
