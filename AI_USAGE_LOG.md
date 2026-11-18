@@ -1,6 +1,6 @@
 # AI Usage Log
 
-**Project:** Café Calle Ocho Ordering Application  
+**Project:** Café Calle Ocho Ordering Application
 **Date:** November 3, 2026  
 **AI tool:** AI assistant using Copilot SDK in VS Code
 
@@ -57,3 +57,39 @@ AI assistance was used to create `schema.sql` for the Café Calle Ocho Flask pro
 |---|---|---|
 | Database schema | Created `users`, `menu_items`, `orders`, and `order_items` tables. Added auto-incrementing integer primary keys, foreign-key references, SQLite-compatible defaults, integer prices in cents, boolean-style availability values, the `received` order-status default, and a default quantity of 1. Added drop statements in dependency order so the schema can rebuild the database. | Executed the script twice with SQLite; verified the sample data, requested defaults, and foreign-key integrity. |
 | Sample data | Added six realistic Café Calle Ocho menu items and three guest sample orders, with order-item rows linking each order to menu items. | Confirmed the seeded menu, orders, and order items were present after execution. |
+
+## Week 4 — Assignment 2: User-Testing Feedback — November 17, 2026
+
+**Project:** Café Calle Ocho Ordering Application
+**Project option:** Option A — Cuban café ordering system
+
+AI assistance was used to organize the supplied user-testing results and prepare submission-ready feedback decisions and GitHub issue descriptions.
+
+| Activity | AI assistance provided | Verification |
+|---|---|---|
+| Feedback organization | Organized the results from two testers for price lookup, category browsing, menu-item submission, and kitchen-board use. | Checked the decisions against the observed tester feedback and only applied fixes for reported confusion. |
+| Priority decisions | Separated requested changes into fix next week, fix later, and not a problem. | Confirmed that the sandwich price was reported as easy to find by both testers and that category and save-confirmation concerns were reported by multiple testers. |
+| GitHub issue preparation | Prepared issue titles and descriptions for category visibility and post-save confirmation. | Confirmed that the issue text requests the `feedback` label but no issue links were fabricated; the project owner must create them in the own GitHub repository. |
+
+### Feedback decisions
+
+| Feedback or issue | Decision | Reason |
+|---|---|---|
+| Menu category headings are not easy to notice. | Fix next week | Both testers needed extra time to locate or confirm the Drinks section. Clearer category separation should improve browsing. |
+| The result of saving a new menu item is not obvious. | Fix next week | A clear success message or redirect would reassure staff that the item was saved. |
+| Add photos or more detailed descriptions to menu items. | Fix later | This could improve the menu, but the basic browsing and menu-management tasks are more important for the next version. |
+| The Cuban sandwich price was easy to find. | Not a problem | Both testers found the price without help, so no change is needed based on this test. |
+
+### Prepared GitHub issues
+
+**Issue 1 title:** Make menu categories easier to identify
+
+**Issue 1 description:** During user testing, the Drinks category was not immediately noticeable. Improve the visual separation of menu categories so customers can scan the menu more easily. Add the feedback label.
+
+**Issue 1 URL:** Not created yet
+
+**Issue 2 title:** Show a clear confirmation after adding a menu item
+
+**Issue 2 description:** After staff submit the menu item form, show a clear success message or redirect that confirms the item was saved. This should make the result of the action easier to understand. Add the feedback label.
+
+**Issue 2 URL:** Not created yet
