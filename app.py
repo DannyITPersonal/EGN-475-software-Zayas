@@ -191,6 +191,7 @@ def new_menu_item():
             (name, category, price_cents, 1)
         )
         database.commit()
+        flash("Menu item added successfully.")
         return redirect(url_for("admin_menu"))
 
     return render_template("new_menu_item.html", form_data={}, errors=[])
