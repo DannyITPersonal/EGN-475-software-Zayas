@@ -8,10 +8,47 @@
     <p>Fresh Cuban café favorites, served with a taste of Little Havana.</p>
 </header>
 
+<style>
+    .category-navigation ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .menu-category {
+        scroll-margin-top: 1rem;
+    }
+
+    .menu-category h2 {
+        display: inline-block;
+        padding-bottom: 0.35rem;
+        border-bottom: 0.2rem solid var(--pico-primary);
+    }
+</style>
+
 <div id="menu">
     {% if items %}
-    {% for category, category_items in items|groupby('category') %}
-    <section aria-labelledby="category-{{ loop.index }}">
+    {% set category_groups = items|groupby('category') %}
+    <nav class="category-navigation" aria-label="Menu categories">
+        <ul>
+            {% for category, category_items in category_groups %}
+            <li>
+                <a
+                    href="#menu-category-{{ loop.index }}"
+                    role="button"
+                    class="outline secondary"
+                >{{ category }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </nav>
+
+    {% for category, category_items in category_groups %}
+    <section
+        id="menu-category-{{ loop.index }}"
+        class="menu-category"
+        aria-labelledby="category-{{ loop.index }}"
+    >
         <h2 id="category-{{ loop.index }}">{{ category }}</h2>
 
         {% for item in category_items %}
