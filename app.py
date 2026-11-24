@@ -1,5 +1,6 @@
 import math
 import os
+import sqlite3
 from flask import (
     Flask,
     render_template,
@@ -244,6 +245,56 @@ def edit_menu_item(item_id):
         form_data=form_data,
         errors=[]
     )
+
+
+# Delete or disable a menu item
+@app.route("/items/<int:item_id>/delete", methods=["POST"])
+def delete_item(item_id):
+    database = db.get_db()
+    item = database.execute(
+        "SELECT id FROM menu_items WHERE id = ?",
+        (item_id,)
+    ).fetchone()
+
+    if item is None:
+        abort(404)
+
+    order_item = database.execute(
+        "SELECT 1 FROM order_items WHERE menu_item_id = ? LIMIT 1",
+        (item_id,)
+    ).fetchone()
+
+    if order_item is not None:
+        database.execute(
+            "UPDATE menu_items SET available = 0 WHERE id = ?",
+            (item_id,)
+        )
+        message = "Menu item is in an order and was marked unavailable instead of deleted."
+    else:
+        try:
+            database.execute(
+                "DELETE FROM menu_items WHERE id = ?",
+                (item_id,)
+            )
+        except sqlite3.IntegrityError:
+            order_item = database.execute(
+                "SELECT 1 FROM order_items WHERE menu_item_id = ? LIMIT 1",
+                (item_id,)
+            ).fetchone()
+            if order_item is None:
+                raise
+
+            database.execute(
+                "UPDATE menu_items SET available = 0 WHERE id = ?",
+                (item_id,)
+            )
+            message = "Menu item is in an order and was marked unavailable instead of deleted."
+        else:
+            message = "Menu item deleted successfully."
+
+    database.commit()
+    flash(message)
+    return redirect(url_for("menu"))
 
 
 # New order page
