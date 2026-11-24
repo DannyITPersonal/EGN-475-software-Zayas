@@ -24,6 +24,12 @@ os.makedirs(app.instance_path, exist_ok=True)
 
 db.init_app(app)
 
+NEXT_STATUS = {
+    "received": "preparing",
+    "preparing": "ready",
+    "ready": "picked up",
+}
+
 
 def validate_item(form, item_id=None):
     errors = []
@@ -75,13 +81,6 @@ SAMPLE_ITEMS = [
     {"id": 4, "name": "Cortadito", "category": "Drinks", "price_cents": 275},
     {"id": 5, "name": "Media Noche", "category": "Food", "price_cents": 900},
     {"id": 6, "name": "Tres Leches", "category": "Desserts", "price_cents": 450}
-]
-
-# Sample kitchen orders
-SAMPLE_KITCHEN = [
-    {"id": 101, "customer": "Maria Lopez", "items": "Cuban Sandwich, Cafe con Leche", "time": "10:15 AM", "status": "Preparing"},
-    {"id": 102, "customer": "Carlos Rivera", "items": "Media Noche, Cortadito", "time": "10:20 AM", "status": "New"},
-    {"id": 103, "customer": "Ana Torres", "items": "Guava Pastelito, Cafe con Leche", "time": "10:25 AM", "status": "Ready"}
 ]
 
 # Sample order history
@@ -303,10 +302,64 @@ def new_order():
     return render_template("order.html", items=SAMPLE_ITEMS)
 
 
+# Update an order's status
+@app.route("/orders/<int:order_id>/status", methods=["POST"])
+def update_order_status(order_id):
+    database = db.get_db()
+    order = database.execute(
+        "SELECT id, status FROM orders WHERE id = ?",
+        (order_id,)
+    ).fetchone()
+
+    if order is None:
+        abort(404)
+
+    requested_status = request.form.get("status", "").strip()
+    next_status = NEXT_STATUS.get(order["status"])
+    if requested_status != next_status:
+        flash("This order cannot be moved to the requested status.")
+        return redirect(url_for("kitchen"))
+
+    result = database.execute(
+        """
+        UPDATE orders
+        SET status = ?
+        WHERE id = ? AND status = ?
+        """,
+        (requested_status, order_id, order["status"])
+    )
+    if result.rowcount != 1:
+        flash("The order status changed before this update. Reload the kitchen board and try again.")
+        return redirect(url_for("kitchen"))
+
+    database.commit()
+    flash(f"Order status updated to {requested_status.title()}.")
+    return redirect(url_for("kitchen"))
+
+
 # Kitchen board
 @app.route("/kitchen")
 def kitchen():
-    return render_template("kitchen.html", orders=SAMPLE_KITCHEN)
+    database = db.get_db()
+    orders = database.execute(
+        """
+        SELECT orders.id,
+               orders.customer_name AS customer,
+               COALESCE(group_concat(menu_items.name, ', '), '') AS items,
+               strftime('%H:%M', orders.created_at) AS time,
+               orders.status
+        FROM orders
+        LEFT JOIN order_items ON order_items.order_id = orders.id
+        LEFT JOIN menu_items ON menu_items.id = order_items.menu_item_id
+        GROUP BY orders.id
+        ORDER BY orders.created_at
+        """
+    ).fetchall()
+    return render_template(
+        "kitchen.html",
+        orders=orders,
+        next_status=NEXT_STATUS
+    )
 
 
 # Order history
