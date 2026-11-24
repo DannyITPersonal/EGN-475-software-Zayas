@@ -8,8 +8,12 @@
     <p>Add a Cuban café favorite to the Café Calle Ocho menu.</p>
 </header>
 
-{% if error %}
-<p role="alert">{{ error }}</p>
+{% if errors %}
+<ul role="alert">
+    {% for error in errors %}
+    <li>{{ error }}</li>
+    {% endfor %}
+</ul>
 {% endif %}
 
 <form method="post">
@@ -38,11 +42,10 @@
     <label for="price">
         Price in dollars
         <input
-            type="number"
+            type="text"
             id="price"
             name="price"
-            min="0"
-            step="0.01"
+            inputmode="decimal"
             value="{{ form_data.price }}"
             required
         >

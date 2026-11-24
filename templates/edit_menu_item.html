@@ -42,11 +42,10 @@
     <label for="price">
         Price in dollars
         <input
-            type="number"
+            type="text"
             id="price"
             name="price"
-            min="0"
-            step="0.01"
+            inputmode="decimal"
             value="{{ form_data.price }}"
             required
         >

@@ -23,6 +23,49 @@ os.makedirs(app.instance_path, exist_ok=True)
 
 db.init_app(app)
 
+
+def validate_item(form, item_id=None):
+    errors = []
+    name = form.get("name", "").strip()
+    category = form.get("category", "").strip()
+    price = form.get("price", type=float)
+
+    if not name:
+        errors.append("Menu item name is required.")
+    else:
+        normalized_name = " ".join(name.split()).casefold()
+        existing_items = db.get_db().execute(
+            "SELECT id, name FROM menu_items"
+        ).fetchall()
+        if any(
+            existing_item["id"] != item_id
+            and " ".join(existing_item["name"].split()).casefold()
+            == normalized_name
+            for existing_item in existing_items
+        ):
+            errors.append("A menu item with this name already exists.")
+
+    if price is None or not math.isfinite(price):
+        errors.append("Enter a valid price greater than $0 and no more than $50.")
+    elif price <= 0:
+        errors.append("Price must be greater than $0.")
+    elif price > 50:
+        errors.append("Price cannot exceed $50.")
+
+    categories = db.get_db().execute(
+        "SELECT DISTINCT category FROM menu_items ORDER BY category"
+    ).fetchall()
+    valid_categories = [row["category"] for row in categories]
+    if category not in valid_categories:
+        if valid_categories:
+            category_list = ", ".join(valid_categories)
+            errors.append(f"Choose a category from: {category_list}.")
+        else:
+            errors.append("No menu item categories are currently configured.")
+
+    return errors
+
+
 # Sample menu data
 SAMPLE_ITEMS = [
     {"id": 1, "name": "Cafe con Leche", "category": "Drinks", "price_cents": 350},
@@ -94,42 +137,32 @@ def item_detail(item_id):
 @app.route("/admin/menu/new", methods=["GET", "POST"])
 def new_menu_item():
     if request.method == "POST":
-        name = request.form.get("name", "").strip()
-        category = request.form.get("category", "").strip()
-        price = request.form.get("price", "").strip()
+        name_input = request.form.get("name", "")
+        category_input = request.form.get("category", "")
+        name = name_input.strip()
+        category = category_input.strip()
         form_data = {
-            "name": name,
-            "category": category,
-            "price": price,
+            "name": name_input,
+            "category": category_input,
+            "price": request.form.get("price", ""),
         }
+        errors = validate_item(request.form)
 
-        if not name:
+        if errors:
             return render_template(
                 "new_menu_item.html",
-                error="Menu item name is required.",
+                errors=errors,
                 form_data=form_data
             )
 
-        if not category:
+        price = request.form.get("price", type=float)
+        if price is None:
             return render_template(
                 "new_menu_item.html",
-                error="Menu item category is required.",
+                errors=["Enter a valid price greater than $0 and no more than $50."],
                 form_data=form_data
             )
-
-        try:
-            price_value = float(price)
-            if not math.isfinite(price_value) or price_value < 0:
-                raise ValueError
-            price_cents = round(price_value * 100)
-            if price_cents > 9223372036854775807:
-                raise ValueError
-        except (OverflowError, ValueError):
-            return render_template(
-                "new_menu_item.html",
-                error="Enter a valid non-negative price.",
-                form_data=form_data
-            )
+        price_cents = round(price * 100)
 
         database = db.get_db()
         database.execute(
@@ -143,7 +176,7 @@ def new_menu_item():
         database.commit()
         return redirect(url_for("menu"))
 
-    return render_template("new_menu_item.html", form_data={})
+    return render_template("new_menu_item.html", form_data={}, errors=[])
 
 
 # Edit a menu item
@@ -159,32 +192,16 @@ def edit_menu_item(item_id):
         abort(404)
 
     if request.method == "POST":
-        name = request.form.get("name", "").strip()
-        category = request.form.get("category", "").strip()
-        price = request.form.get("price", "").strip()
+        name_input = request.form.get("name", "")
+        category_input = request.form.get("category", "")
+        name = name_input.strip()
+        category = category_input.strip()
         form_data = {
-            "name": name,
-            "category": category,
-            "price": price,
+            "name": name_input,
+            "category": category_input,
+            "price": request.form.get("price", ""),
         }
-        errors = []
-
-        if not name:
-            errors.append("Menu item name is required.")
-
-        if not category:
-            errors.append("Menu item category is required.")
-
-        try:
-            price_value = float(price)
-            if not math.isfinite(price_value) or price_value < 0:
-                raise ValueError
-            price_cents = round(price_value * 100)
-            if price_cents > 9223372036854775807:
-                raise ValueError
-        except (OverflowError, ValueError):
-            errors.append("Enter a valid non-negative price.")
-            price_cents = None
+        errors = validate_item(request.form, item_id=item_id)
 
         if errors:
             return render_template(
@@ -193,6 +210,16 @@ def edit_menu_item(item_id):
                 form_data=form_data,
                 errors=errors
             )
+
+        price = request.form.get("price", type=float)
+        if price is None:
+            return render_template(
+                "edit_menu_item.html",
+                item=item,
+                form_data=form_data,
+                errors=["Enter a valid price greater than $0 and no more than $50."]
+            )
+        price_cents = round(price * 100)
 
         database.execute(
             """
