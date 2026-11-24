@@ -6,6 +6,60 @@
 <h1>Kitchen Order Board</h1>
 <p>View incoming orders and their preparation status.</p>
 
+<style>
+    .status-guide ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        padding-left: 0;
+        list-style: none;
+    }
+
+    .status-guide li {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .order-status {
+        display: inline-block;
+        padding: 0.2rem 0.6rem;
+        border-radius: 999px;
+        font-size: 0.85rem;
+        font-weight: 700;
+    }
+
+    .status-received {
+        color: #1e3a8a;
+        background-color: #dbeafe;
+    }
+
+    .status-preparing {
+        color: #78350f;
+        background-color: #fef3c7;
+    }
+
+    .status-ready {
+        color: #14532d;
+        background-color: #dcfce7;
+    }
+
+    .status-picked-up {
+        color: #1f2937;
+        background-color: #e5e7eb;
+    }
+</style>
+
+<aside class="status-guide" aria-label="Order status guide">
+    <strong>Order status guide</strong>
+    <ul>
+        <li><span class="order-status status-received">Received</span> Waiting to begin</li>
+        <li><span class="order-status status-preparing">Preparing</span> Being made</li>
+        <li><span class="order-status status-ready">Ready</span> Waiting for pickup</li>
+        <li><span class="order-status status-picked-up">Picked Up</span> Collected</li>
+    </ul>
+</aside>
+
 <section aria-label="Kitchen orders">
     {% for order in orders %}
     <article>
@@ -15,7 +69,10 @@
             <p><strong>Received:</strong> {{ order.time }}</p>
             <p>
                 <strong>Status:</strong>
-                <small><mark>{{ order.status|title }}</mark></small>
+                <span
+                    class="order-status status-{{ order.status|replace(' ', '-') }}"
+                    aria-label="Current status: {{ order.status|title }}"
+                >{{ order.status|title }}</span>
             </p>
         </header>
 
