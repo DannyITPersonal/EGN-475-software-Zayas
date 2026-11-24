@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Menu Administration - Cafe Calle Ocho{% endblock %}
+
+{% block content %}
+<header>
+    <h1>Menu Administration</h1>
+    <p>Review menu items, edit details, or remove items.</p>
+    <a href="{{ url_for('new_menu_item') }}" role="button">Add New Item</a>
+</header>
+
+<section aria-labelledby="existing-items">
+    <h2 id="existing-items">Existing Menu Items</h2>
+    {% if items %}
+    <div class="overflow-auto">
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">Item name</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Availability</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <th scope="row">{{ item.name }}</th>
+                    <td>{{ item.category }}</td>
+                    <td>${{ "%.2f"|format(item.price_cents / 100) }}</td>
+                    <td>{{ "Available" if item.available else "Unavailable" }}</td>
+                    <td>
+                        <a
+                            href="{{ url_for('edit_menu_item', item_id=item.id) }}"
+                            role="button"
+                            class="secondary"
+                        >Edit</a>
+                        {% if item.available %}
+                        <form
+                            method="post"
+                            action="{{ url_for('delete_item', item_id=item.id) }}"
+                            onsubmit="return confirm('Delete this item?')"
+                        >
+                            <button type="submit" class="contrast">Delete</button>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p>No menu items have been added yet.</p>
+    {% endif %}
+</section>
+{% endblock %}

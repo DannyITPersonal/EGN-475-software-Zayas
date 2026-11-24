@@ -115,6 +115,23 @@ def menu():
     )
 
 
+# Menu administration page
+@app.route("/admin/menu")
+def admin_menu():
+    database = db.get_db()
+    items = database.execute(
+        """
+        SELECT id, name, category, price_cents, available
+        FROM menu_items
+        ORDER BY category, name
+        """
+    ).fetchall()
+    return render_template(
+        "menu_admin.html",
+        items=items
+    )
+
+
 # Individual menu item page
 @app.route("/menu/<int:item_id>")
 def item_detail(item_id):
@@ -174,7 +191,7 @@ def new_menu_item():
             (name, category, price_cents, 1)
         )
         database.commit()
-        return redirect(url_for("menu"))
+        return redirect(url_for("admin_menu"))
 
     return render_template("new_menu_item.html", form_data={}, errors=[])
 
@@ -231,7 +248,7 @@ def edit_menu_item(item_id):
         )
         database.commit()
         flash("Menu item updated successfully.")
-        return redirect(url_for("menu"))
+        return redirect(url_for("admin_menu"))
 
     form_data = {
         "name": item["name"],
@@ -293,7 +310,7 @@ def delete_item(item_id):
 
     database.commit()
     flash(message)
-    return redirect(url_for("menu"))
+    return redirect(url_for("admin_menu"))
 
 
 # New order page
