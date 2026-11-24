@@ -6,11 +6,13 @@ from flask import (
     request,
     redirect,
     url_for,
-    abort
+    abort,
+    flash
 )
 import db
 
 app = Flask(__name__)
+app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev")
 
 app.config["DATABASE"] = os.path.join(
     app.instance_path,
@@ -142,6 +144,79 @@ def new_menu_item():
         return redirect(url_for("menu"))
 
     return render_template("new_menu_item.html", form_data={})
+
+
+# Edit a menu item
+@app.route("/items/<int:item_id>/edit", methods=["GET", "POST"])
+def edit_menu_item(item_id):
+    database = db.get_db()
+    item = database.execute(
+        "SELECT id, name, category, price_cents FROM menu_items WHERE id = ?",
+        (item_id,)
+    ).fetchone()
+
+    if item is None:
+        abort(404)
+
+    if request.method == "POST":
+        name = request.form.get("name", "").strip()
+        category = request.form.get("category", "").strip()
+        price = request.form.get("price", "").strip()
+        form_data = {
+            "name": name,
+            "category": category,
+            "price": price,
+        }
+        errors = []
+
+        if not name:
+            errors.append("Menu item name is required.")
+
+        if not category:
+            errors.append("Menu item category is required.")
+
+        try:
+            price_value = float(price)
+            if not math.isfinite(price_value) or price_value < 0:
+                raise ValueError
+            price_cents = round(price_value * 100)
+            if price_cents > 9223372036854775807:
+                raise ValueError
+        except (OverflowError, ValueError):
+            errors.append("Enter a valid non-negative price.")
+            price_cents = None
+
+        if errors:
+            return render_template(
+                "edit_menu_item.html",
+                item=item,
+                form_data=form_data,
+                errors=errors
+            )
+
+        database.execute(
+            """
+            UPDATE menu_items
+            SET name = ?, category = ?, price_cents = ?
+            WHERE id = ?
+            """,
+            (name, category, price_cents, item_id)
+        )
+        database.commit()
+        flash("Menu item updated successfully.")
+        return redirect(url_for("menu"))
+
+    form_data = {
+        "name": item["name"],
+        "category": item["category"],
+        "price": "{:.2f}".format(item["price_cents"] / 100),
+    }
+    return render_template(
+        "edit_menu_item.html",
+        item=item,
+        form_data=form_data,
+        errors=[]
+    )
 
 
 # New order page

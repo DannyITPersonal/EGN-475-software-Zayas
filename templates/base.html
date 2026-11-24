@@ -29,6 +29,13 @@
     </nav>
 
     <main class="container">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                <p role="status">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
         {% block content %}
         {% endblock %}
     </main>

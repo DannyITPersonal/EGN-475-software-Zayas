@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Menu Item - Cafe Calle Ocho{% endblock %}
+
+{% block content %}
+<header>
+    <h1>Edit Menu Item</h1>
+    <p>Update the information for {{ item.name }}.</p>
+</header>
+
+{% if errors %}
+<ul role="alert">
+    {% for error in errors %}
+    <li>{{ error }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<form method="post">
+    <label for="name">
+        Item name
+        <input
+            type="text"
+            id="name"
+            name="name"
+            value="{{ form_data.name }}"
+            required
+        >
+    </label>
+
+    <label for="category">
+        Category
+        <input
+            type="text"
+            id="category"
+            name="category"
+            value="{{ form_data.category }}"
+            required
+        >
+    </label>
+
+    <label for="price">
+        Price in dollars
+        <input
+            type="number"
+            id="price"
+            name="price"
+            min="0"
+            step="0.01"
+            value="{{ form_data.price }}"
+            required
+        >
+    </label>
+
+    <button type="submit">Save Changes</button>
+    <a href="{{ url_for('menu') }}">Cancel</a>
+</form>
+{% endblock %}
