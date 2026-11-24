@@ -93,3 +93,33 @@ AI assistance was used to organize the supplied user-testing results and prepare
 **Issue 2 description:** After staff submit the menu item form, show a clear success message or redirect that confirms the item was saved. This should make the result of the action easier to understand. Add the feedback label.
 
 **Issue 2 URL:** Not created yet
+
+## Flask Menu and Order Workflow Assignment — November 24, 2026
+
+**Project:** Café Calle Ocho Ordering Application  
+**AI tool:** AI assistant using Copilot SDK in VS Code
+
+AI assistance was used to implement and test the menu-management and kitchen-order workflows in the Flask application.
+
+| Activity | AI assistance provided | Verification |
+|---|---|---|
+| Menu item editing and validation | Added an edit route and reusable `validate_item` function for required names, safe price conversion and limits, database-backed categories, and duplicate names ignoring case and extra spaces. | Exercised valid and invalid create/edit submissions with a temporary SQLite database; confirmed error messages and entered values were preserved. |
+| Menu item deletion | Added a POST-only delete route with parameterized SQL. Items referenced by orders are marked unavailable rather than removed, preserving order records. | Confirmed GET is rejected, missing items return 404, unreferenced items are deleted, and referenced items remain available to existing orders. |
+| Order status workflow | Added `NEXT_STATUS` and a POST-only status route for `received` → `preparing` → `ready` → `picked up`. | Tested valid and invalid transitions, including rejection after `picked up`, and verified database status values. |
+| Kitchen board | Connected the board to SQLite and added status badges and POST buttons for only the next allowed transition. | Verified the kitchen route renders and each order has the appropriate next-step control. |
+| Flash messages | Added shared flash display to `base.html`, so messages appear on pages extending it and are consumed after display. | Confirmed a message appeared once and was absent on the next page load. |
+| Menu administration | Added `/admin/menu` with an item table and add, edit, and delete actions. Moved management controls off the customer-facing menu and redirected completed management actions to the admin page. | Tested the admin page and CRUD redirects; confirmed `/admin/menu` returned HTTP 200. |
+
+### Assignment questions
+
+1. **Why redirect after a successful form?**
+   Redirecting after a successful POST follows Post/Redirect/Get: Flask saves the submission, then sends the browser to a page loaded with GET. This helps prevent a refresh from repeating the POST. In Interactive 5A, the missing redirect allowed a refresh to repeat the previous form submission, potentially saving the same information again.
+
+2. **Why must delete use POST?**
+   Deletion changes database state, so it should not be triggered by a GET request intended for retrieving a page. A browser prefetch, crawler, or other automated service could follow a GET delete link unintentionally. The delete form submits by POST, and the route accepts only POST.
+
+3. **Which additional validation rule was added?**
+   Menu item names are checked for duplicates after normalizing capitalization and extra whitespace. This helps prevent staff from adding the same item under slightly different spellings or spacing.
+
+4. **What AI-assisted code was changed, and why?**
+   The customer-facing menu originally contained Add, Edit, and Delete controls. Those administrative actions were moved to a dedicated menu-admin page because they did not belong on the customer menu. The delete action uses a POST form rather than a normal link.
