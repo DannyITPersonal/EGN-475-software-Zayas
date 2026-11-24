@@ -96,7 +96,7 @@ AI assistance was used to organize the supplied user-testing results and prepare
 
 ## Flask Menu and Order Workflow Assignment — November 24, 2026
 
-**Project:** Café Calle Ocho Ordering Application  
+**Project:** Café Calle Ocho Ordering Application
 **AI tool:** AI assistant using Copilot SDK in VS Code
 
 AI assistance was used to implement and test the menu-management and kitchen-order workflows in the Flask application.
