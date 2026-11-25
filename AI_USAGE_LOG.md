@@ -123,3 +123,31 @@ AI assistance was used to implement and test the menu-management and kitchen-ord
 
 4. **What AI-assisted code was changed, and why?**
    The customer-facing menu originally contained Add, Edit, and Delete controls. Those administrative actions were moved to a dedicated menu-admin page because they did not belong on the customer menu. The delete action uses a POST form rather than a normal link.
+
+## Week 5 — Assignment 5A2: Iterating from User Feedback — November 24, 2026
+
+**Project:** Café Calle Ocho Ordering Application
+
+**AI tool:** AI assistant using Copilot SDK in VS Code
+
+AI assistance was requested to implement feedback-based improvements from the supplied Week 5 assignment guide. The changes below are based on the recorded observations from testers Alex and Maria; no feedback was invented.
+
+| Feedback from testing | AI assistance provided | Verification |
+|---|---|---|
+| Alex found the Drinks heading after 45 seconds and said it could stand out more. Maria found it after 55 seconds and paused to check whether all drinks were listed. Both testers found the Cuban sandwich price (Alex: 25 seconds; Maria: 35 seconds). | Added category jump buttons and more noticeable category headings to `templates/menu.html`. Kept the sandwich price display unchanged because both testers found it without help. | Clicked the Food category button and confirmed navigation to `#menu-category-2`. |
+| Alex saved a pastry in 55 seconds but asked whether the save worked. Maria completed the task in 1 minute 10 seconds and hesitated because the next step was unclear. | Added a success flash message after a menu item is created in `app.py`. | Submitted the form using an isolated database and confirmed the success message appeared after redirect. Verified the project database was unchanged. |
+| Alex identified the Ready order on the kitchen board in 35 seconds and said order status should be easy to understand. Maria identified it in 30 seconds using the status label. | Added color-coded status badges and a brief status guide to `templates/kitchen.html`. | Checked the status guide and badges, and tested transition buttons using a temporary database initialized with active statuses. |
+
+### Changes and evidence
+
+The improvements were committed separately:
+
+- `61f07a1` — `Iteration: improve menu category scanning (feedback #1-#3)`
+- `146a751` — `Iteration: confirm menu item saves (feedback #4-#5)`
+- `9cf3e03` — `Iteration: clarify order status (feedback #6-#7)`
+
+Before-and-after screenshots are saved in `iteration_screenshots/feedback_1_categories/`, `iteration_screenshots/feedback_2_save_confirmation/`, and `iteration_screenshots/feedback_3_order_status/`.
+
+### Verification and limitations
+
+Confirmed the category jump link works, the save confirmation appears after a successful submission, and the kitchen board displays the status guide, badges, and appropriate next-status controls. The relevant application pages returned HTTP 200, and `git diff --check` passed. A complete customer order-submission flow was not verified as part of these feedback-driven changes.
